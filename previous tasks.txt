@@ -1,0 +1,196 @@
+1.Write a shell script that deletes all lines containing a specified word in one or more files supplied as arguments to it?
+script:
+#!/bin/bash
+if [ $# -lt 2 ]
+then
+  echo "Usage: $0 word file [file ...]"
+  exit 1
+fi
+word=$1
+shift
+for file in "$@"
+do
+  if [ -f "$file" ]
+  then
+    grep -v "$word" "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+  else
+    echo "Error: $file is not a file"
+  fi
+done
+
+-----------------------------------------------------------------------------------------------------------------------------------
+2.Write a shell script to list all of the directory files in a directory?
+script:
+#!/bin/bash
+if [ $# -lt 1 ]
+then
+  echo "Usage: $0 directory"
+  exit 1
+fi
+directory=$1
+if [ -d "$directory" ]
+then
+  for file in "$directory"/*
+  do
+    if [ -f "$file" ]
+    then
+      echo "$file"
+    fi
+  done
+else
+  echo "Error: $directory is not a directory"
+fi
+--------------------------------------------------------------------------------------------------------------------------------
+3.Monitoring Disk Space utilization and Send Email Alert using script?
+script:
+#!/bin/bash
+# Constants
+THRESHOLD=30 # Threshold percentage of disk space utilization
+
+EMAIL_ADDRESS="manojsai5855@gmail.com" # Email address to send the alert to
+
+DISK_PATH="/dev/sr0" # Disk path to monitor
+
+# Get the current disk space utilization percentage
+
+used_percentage=$(df "$DISK_PATH" | tail -1 | awk '{print $5}' | sed 's/%//')
+
+# Check if the utilization is above the threshold
+
+if [ "$used_percentage" -ge "$THRESHOLD" ]
+
+then
+
+  # Compose the email message
+
+  message="The disk space utilization on $DISK_PATH is above the threshold of $THRESHOLD%. Current utilization: $used_percentage%"
+
+  # Send the email alert
+
+  echo "$message" | mail -s "Disk Space Alert" "$EMAIL_ADDRESS"
+
+fi
+
+----------------------------------------------------------------------------------------------------------------------------------
+4.Write a simple script to install any tomcat server?
+script:
+#!/bin/bash
+
+req_tom_ver="7.0.25"
+
+tom_m_v=$(echo $req_tom_ver|cut -c 1)
+
+url="https://archive.apache.org/dist/tomcat/tomcat-${tom_m_v}/v${req_tom_ver}/bin/apache-tomcat-${req_tom_ver}.tar.gz"
+
+wget $url
+
+tar xvf apache-tomcat-${req_tom_ver}.tar.gz
+
+mv apache-tomcat-${req_tom_ver} tomcat${tom_m_v}
+
+rm -rf apache-tomcat-${req_tom_ver}.tar.gz
+
+--------------------------------------------------------------------------------------------------------------------------------
+5.write a shell script using arithmetic operators for adding, multiplication and subtraction of any two numbers?
+script:
+#! /bin/bash
+
+echo  "enter the a: "
+
+read a
+
+echo  "enter the b: "
+
+read b
+
+echo "addition of the values ` expr $a + $b `"
+
+echo "subtraction of the values ` expr $a - $b `"
+
+echo "addition of the values ` expr $a \* $b `"
+
+echo "addition of the values ` expr $a / $b `"
+
+echo "addition of the values ` expr $a % $b `"
+
+echo "addition of the values ` expr $a * $b `"
+
+echo "addition of the values ` expr $a + $b `"
+
+-----------------------------------------------------------------------------------------------------------------------------
+6.This example script prompts the user to enter a month and outputs the number of days. There are three possible answers: 30 days, 31 days, 28 or 29 days for February.
+script:
+#!/bin/bash 
+ 
+echo "Enter the name of a month." 
+
+read month 
+
+case $month in 
+
+  February) 
+
+ echo "There are 28/29 days in $month.";; 
+
+  April | June | September | November) 
+
+echo "There are 30 days in $month.";; 
+
+  January | March | May | July | August | October | December) 
+
+echo "There are 31 days in $month.";; 
+
+  *) 
+
+echo "Unknown month. Please check if you entered the correct month name: $month";; 
+
+esac
+--------------------------------------------------------------------------------------------------------------------------------
+7.How will you debug a script if you have made any mistakes in a already written script?
+ans:
+we can use many ways to debug a script
+1: one way to debug a script is " sh -x <script.sh> "
+2. we can use set -x and set +x in script.
+-----------------------------------------------------------------------------------------------------------------------------
+8.Script for iterations if-else, for, etc.,?
+script:
+#!/bin/bash
+
+echo " for loop demo starts ..... "
+
+for (( i=100;i>=0;i-- ))
+
+do
+
+echo $i
+
+done
+
+#!/bin/bash
+
+echo "enter the filename: "
+
+read filename
+
+if [ -f $filename ]
+
+then
+
+echo "$filename is existed in current dir"
+
+cat $filename
+
+else
+
+echo "$filename is not existed in curr dir"
+
+touch $filename
+
+fi
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+9.How to schedule cronjobs for running any script like backup of logs?
+ans:
+open crontab in that we can give script and mention the time
+* * * * * <scheduledscript.sh> /path/
+it will run every min. we can edit crontab by using crontab -e
