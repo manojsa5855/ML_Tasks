@@ -1,0 +1,181 @@
+QSTN:
+
+Define the backup directory: set a variable called BACKUP_DIR to the directory where the backups will be stored, such as /var/backups. 
+
+Define the file system paths to be backed up: set a variable called BACKUP_PATHS to a space-separated list of the directories you want to back up, such as /etc /home /opt /var. 
+
+Define the backup filename: set a variable called BACKUP_FILENAME to the name of the backup file, including the current date and time. You can use the date command to generate the timestamp and append it to a string, such as $(date +%Y-%m-%d_%H-%M-%S)_backup.tar.gz. 
+
+Define the number of backups to keep: set a variable called BACKUP_COUNT to the maximum number of backups you want to keep, such as 5. 
+
+Define a function to create the backup archive: create a function called create_backup that runs the tar command to create a compressed tar archive of the specified directories and saves it to the backup directory with the specified filename. 
+
+Define a function to check if the backup directory exists: create a function called check_backup_dir that checks if the backup directory exists and creates it if it does not. 
+
+Define a function to check if the backup was successful: create a function called check_backup_status that checks the exit status of the tar command to see if the backup      was created successfully or not. If the exit status is 0, output a message saying the backup was created successfully. If the exit status is not 0, output a message saying the backup failed and exit the script with a status code of 1. 
+
+Define a function to remove old backups: create a function called remove_old_backups that gets a list of all the backup files in the backup directory, sorts them by modification time (oldest first), and removes the oldest ones until the number of backups is below the maximum specified in BACKUP_COUNT. 
+
+Check if backup directory exists call the check_backup_dir function to ensure that the backup directory exists. 
+
+Create backup archive: call the create_backup function to create the backup archive. 
+
+Check backup status: call the check_backup_status function to check the exit status of the tar command and output a message indicating whether the backup was successful or not. 
+
+Remove old backups: call the remove_old_backups function to remove any old backup archives if the maximum number of backups has been exceeded. 
+
+Exit script: exit the script with a status code of 0 to indicate successful completion 
+
+script:
+1 #!/bin/bash
+
+  2 
+
+  3 #creating backup directory
+
+  4 
+
+  5 BACKUP_DIR="/var/backups"
+
+  6 
+
+  7 #defining file system path
+
+  8 
+
+  9 BACKUP_PATHS="/etc /home /opt /var "
+
+ 10 
+
+ 11 # defining a backup filename along with variables
+
+ 12 
+
+ 13 BACKUP_FILENAME="$(date +%Y-%m-%d_%H-%M-%S)_backup.tar.gz"
+
+ 14 
+
+ 15 # defining number of backups to keep
+
+ 16 
+
+ 17 BACKUP_COUNT=5
+
+ 18 
+
+ 19 # defining a create_backup function 
+
+ 20 
+
+ 21 create_backup() {
+
+ 22 
+
+ 23 sudo tar -czf "$BACKUP_DIR/$BACKUP_FILENAME" $BACKUP_PATHS
+
+ 24 }
+
+ 25 
+
+ 26 # defining a check_backup_dir function
+
+ 27 
+
+ 28 check_backup_dir() {
+
+ 29 
+
+ 30         if [ ! -d "$BACKUP_DIR" ]; then
+
+ 31          mkdir -p "$BACKUP_DIR"
+32         fi
+
+ 33 }
+
+ 34 
+
+ 35 # defining a check_backup_status
+
+ 36 
+
+ 37 check_backup_status() {
+
+ 38         if [ $? -eq 0 ]; then
+
+ 39                 echo " backup created successfully "
+
+ 40         else
+
+ 41                 echo " backup not created "
+
+ 42         exit 1
+
+ 43         fi
+
+ 44 }
+
+ 45 
+
+ 46 # defining a function that remove the old backups
+
+ 47 REMOVE_OLD_BACKUPS() {
+
+ 48          cd "$BACKUP_DIR"           
+
+ 49          backup_files=($(ls -t))            
+
+ 50          num_backups=${#backup_files[@]}            
+
+ 51          if [ $num_backups -gt $BACKUP_COUNT ]; then                
+
+ 52          num_to_delete=$((num_backups - BACKUP_COUNT))                
+
+ 53          for (( i=0; i<num_to_delete; i++ ));
+
+ 54         do                    
+
+ 55                 rm "${backup_files[$i]}"                
+
+ 56         done            
+
+ 57                 fi 
+
+ 58 
+
+ 59         } 
+
+ 60 
+
+ 61 # calling functions
+
+62 create_backup
+
+ 63 check_backup_dir
+
+ 64 check_backup_status
+
+ 65 REMOVE_OLD_BACKUPS
+-------------------------------------------------------------------------------------------------------------------
+OUTPUT:
+2023-02-21_18-20-20_backup.tar.gz 
+tar tf 2023-02-21_18-20-20_backup.tar.gz | head -10
+etc/
+
+etc/iproute2/
+
+etc/iproute2/nl_protos
+
+etc/iproute2/rt_protos.d/
+
+etc/iproute2/rt_protos.d/README
+
+etc/iproute2/rt_protos
+
+etc/iproute2/bpf_pinning
+
+etc/iproute2/ematch_map
+
+etc/iproute2/rt_realms
+
+etc/iproute2/rt_tables
+

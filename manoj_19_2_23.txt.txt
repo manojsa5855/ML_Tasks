@@ -1,0 +1,107 @@
+1. Write a shell script to get current date, time, user name and current working directory.
+script:
+#!/bin/bash
+echo " the date is: " 
+
+date
+
+echo " the time is: "
+
+date +%T
+
+echo " the username is: "
+
+whoami
+
+echo " present working directory is: "
+
+pwd
+
+----------------------------------------------------------------------
+output:
+the date is: 
+
+Sunday 19 February 2023 10:38:05 PM IST
+
+ the time is: 
+
+22:38:05
+
+ the username is: 
+
+manoj1195
+
+ present working directory is: 
+
+/home/manoj1195
+----------------------------------------------------------------------------
+2. Write a Shell Script that adds two numbers if provided as the command Line Argument and if the two numbers are not entered it outputs an Error Message along with a one-Line of how-to use description.
+script:
+#!/bin/bash
+
+if [ $# -ne 2 ]; then
+
+    echo "Error: Two numbers not provided"
+
+    echo "Usage: $0 <number1> <number2>"
+
+    exit 1
+fi
+number1=$1
+
+number2=$2
+
+sum=$(( $number1 + $number2 ))
+
+echo "Sum of $number1 and $number2 is: $sum"
+-------------------------------------------------------------------
+output:
+Sum of 345 and 678 is: 1023
+
+--------------------------------------------------------------------------------
+3. You needs to print a given Number say 10572, in reverse order using a Shell script such that the input is provided using command Line Argument only. If the input data is not provided as Command Line Argument, it should throw and error and should suggest, how to use the script. Write the script but before that tell me the algorithm that needs to be implemented here.
+script:
+#!/bin/bash
+if [ -z $1 ]; then
+    echo "Error: Input number not provided"
+    echo "Usage: $0 <number>"
+    exit 1
+fi
+number=$1
+reverse=0
+while [ $number -gt 0 ]
+do
+    digit=$(( $number % 10 ))
+
+    reverse=$(( $reverse * 10 + $digit ))
+
+    number=$(( $number / 10 ))
+done
+echo "Reverse of $1 is $reverse"
+---------------------------------------------------------
+output:
+Reverse of 123456789 is 987654321
+
+------------------------------------------------------------------------
+4. You are supposed to calculate a real number calculation directly from terminal and not any shell script. What will you do (say the real numbers are 7.56 and 2.453)?
+ANS:
+echo " 7.56 + 3.45 " | bc
+
+11.01
+
+------------------------------------------------------------------------------
+5. You are supposed to find the value of pi upto 100 places of decimal, what is the easiest way to get the result done.
+ANS:echo "scale=100;22/7" | bc
+
+3.142857142857142857142857142857142857142857142857142857142857142857\
+
+1428571428571428571428571428571428
+
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+ 
+
+
+
