@@ -1,0 +1,56 @@
+---
+- hosts: any
+  become: true
+  become_user: root
+  tasks:
+
+# tasks file for webapp
+
+    - name: update
+      command: apt update
+      become: true
+
+
+    - name: install nodejs
+      command: apt install nodejs -y
+      become: true
+    
+    - name: install npm
+      command: sudo apt install npm -y
+
+    - name: install git
+      command: sudo apt install git -y
+      become: true
+
+    - name: Creates directory
+      file:
+        path: /home/adminuser/hms
+        state: directory
+      become: true
+
+    - name: Clone a github repository
+      git:
+        repo: https://github.com/ManjunathNayak-23/Nodejsdemo.git
+        dest: /home/adminuser/hms
+        clone: yes
+        update: yes
+        force: true
+      become: true
+
+      
+    - name: install nodemon
+      command: chdir=/home/adminuser/hms sudo npm install -g nodemon -y
+      become: true
+      
+
+    - name: Go to the folder and execute command
+      command: chdir=/home/adminuser/hms sudo npm install
+      become: true
+
+    - name: start server
+      command: chdir=/home/adminuser/hms/ sudo npm start > /dev/null 2>&1 &
+      become: true
+      async: 4200
+      poll: 0
+        
+      
